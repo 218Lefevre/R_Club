@@ -1,0 +1,89 @@
+---
+title: "170130_wk2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+cd to working dir and load data into the df "INXdf" 
+```{r}
+setwd('/home/dan/Documents/R_Club/170130_week2/')
+INXdf <- read.csv('R-ClubINXdata.csv')
+```
+
+1.  How many rows and columns are present in the data?
+```{r}
+dim(INXdf)
+```
+
+2.  What are the column names for the data (I.e. What data are in this spreadsheet)?
+```{r}
+colnames(INXdf)
+```
+
+3. What do the data look like?  Which columns are integers and which are strings? 
+```{r}
+str(INXdf)
+```
+
+4.  The data are mixed in terms of their cell types and cell identities.  Can you sort the data sheet by Cell Type and Cell ID?  Print (to the screen) the entire data set after sorting it.
+```{r}
+arrange(INXdf, CellType, CellID) %>% head()
+```
+
+
+5.  Plot a scatterplot of INX1 vs. INX2 for all the data combined (this is Plot 1).
+```{r}
+head(INXdf)
+
+ggplot(INXdf, aes(x=INX1, y=INX2,)) +
+  geom_point()
+```
+
+6.  Plot a scatterplot of INX1 vs. INX2 for all the data combined, but separate the Cell Types (STG vs CG) with different colors (this is Plot 2).
+```{r}
+ggplot(INXdf, aes(x=INX1, y=INX2, color=CellType)) +
+  geom_point() +
+  ggtitle("STG vs CG for INX1 vs INX2") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+#can also use > labs(title = "test")
+#there must be an easier way than using > theme(plot.title = element_text(hjust = 0.5)) 
+```
+
+7.  Add regression lines to the scatterplots by Cell Type (this is Plot 3).
+```{r}
+ggplot(INXdf, aes(x=INX1, y=INX2, color=CellType)) +
+  geom_point() +
+  geom_smooth(method= "lm", se = FALSE) +
+  ggtitle("STG vs CG for INX1 vs INX2") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+```
+
+8.  Plot the same scatterplot, with the regression lines, but identify Cell Type (CellType) by the SHAPE of the points, and identify Cell Identity (CellID) with different colors.  (this is Plot 4)
+```{r}
+ggplot(INXdf, aes(x=INX1, y=INX2, shape=CellType)) +
+  geom_point(aes(color=CellID)) +
+  geom_smooth(method= "lm", se = FALSE) +
+  ggtitle("STG vs CG for INX1 vs INX2") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+```
+
+9.  Plot of Boxplot (box and whiskers) for INX3 separated by Cell Type (STG vs CG).  Color the boxes by Cell Type, and try to match the formatting of the outliers and points in my plot if you like (Plot 5).
+```{r}
+ggplot(INXdf, aes(x=CellType, y=INX3, fill=CellType)) +
+  geom_boxplot() +
+  ggtitle("INX3 by cell type") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+```
+
+10.  Plot Boxpots of INX2 and separate Cell Type on the X-xis, and separate by Cell ID in different colors (this is Plot 6).
+```{r}
+ggplot(INXdf, aes(x=CellType, y=INX2,)) +
+  geom_boxplot(aes(fill=CellID)) +
+  ggtitle("INX2 by cell type and cell ID") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+```
